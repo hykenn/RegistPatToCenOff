@@ -1,0 +1,189 @@
+{
+	"info": {
+		"_postman_id": "3fed06bf-8cf9-4382-9bfe-08bce49f6ea8",
+		"name": "TO-CODATA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40835786"
+	},
+	"item": [
+		{
+			"name": "POSTAddPatientDATA",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"sample9\",\r\n    \"middleName\": \"sample9\",\r\n    \"lastName\": \"sample9\",\r\n    \"sex\": \"Male\",\r\n    \"status\": \"Single\",\r\n    \"placeOfBirth\": \"Cebu\",\r\n    \"religion\": \"Catholic\",\r\n    \"contactInfo\": \"1234567890\",\r\n    \"presentAddress\": \"Purok-1 Brgy. Sto. Rosario, Magallanes, ADN\",\r\n    \"permanentAddress\": \"Purok-1 Brgy. Sto. Rosario, Magallanes, ADN\",\r\n    \"zipCode\": \"10001\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:2525/api/patients/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2525",
+					"path": [
+						"api",
+						"patients",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GETAllPatientDATA",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:2525/api/patients/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2525",
+					"path": [
+						"api",
+						"patients",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GETSearchData",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:2525/api/patients/search?firstname=patient2&lastname=patient2&birthdate=2000-01-01",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2525",
+					"path": [
+						"api",
+						"patients",
+						"search"
+					],
+					"query": [
+						{
+							"key": "firstname",
+							"value": "patient2"
+						},
+						{
+							"key": "lastname",
+							"value": "patient2"
+						},
+						{
+							"key": "birthdate",
+							"value": "2000-01-01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GETByHospitalNumber",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:2525/api/patients/getbyid/0000000001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2525",
+					"path": [
+						"api",
+						"patients",
+						"getbyid",
+						"0000000001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUTbyHospitalrn",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"John\",\r\n    \"middleName\": \"Doe\",\r\n    \"lastName\": \"Smith\",\r\n    \"sex\": \"Male\",\r\n    \"status\": \"Single\",\r\n    \"placeOfBirth\": \"City Name\",\r\n    \"religion\": \"Religion\",\r\n    \"contactInfo\": \"1234567890\",\r\n    \"presentAddress\": \"Present Address\",\r\n    \"permanentAddress\": \"Permanent Address\",\r\n    \"presentZipCode\": \"12345\",\r\n    \"permanentZipCode\": \"54321\",\r\n    \"birthdate\": \"1990-01-01\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:2525/api/patients/updatebyhospitalRecordNo/0000000001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2525",
+					"path": [
+						"api",
+						"patients",
+						"updatebyhospitalRecordNo",
+						"0000000001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETEbyHospitalrecord",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:2525/api/patients/softdelete/0000000002",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2525",
+					"path": [
+						"api",
+						"patients",
+						"softdelete",
+						"0000000002"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
