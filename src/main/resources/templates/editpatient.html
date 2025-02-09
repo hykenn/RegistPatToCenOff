@@ -208,8 +208,8 @@
                                       placeholder="Hosp. Record No."
                                       readonly
                                   />
-                                  <button class="btn btn-success" type="button" id="generateNewHospitalRecordNo">
-                                      <i class="flex-shrink-0 bx bx-refresh"></i>
+                                  <button class="btn btn-success" type="button">
+                                      <!-- <i class="flex-shrink-0 bx bx-refresh"></i> -->
                                   </button>
                               </div>
                           </div>
@@ -259,7 +259,7 @@
                           <!-- Birthdate -->
                           <div class="col-md-6">
                             <label for="birthdate" class="form-label">Date of Birth</label>
-                            <input type="date" class="form-control" id="phoneNumber" name="birthdate"/>
+                            <input type="date" class="form-control" id="birthdate" name="birthdate"/>
                           </div>
 
                           <!-- Religion -->
@@ -290,10 +290,10 @@
                         </div>
 
                         <!-- Same Address Checkbox -->
-                        <div class="col-md-12">
+                        <!-- <div class="col-md-12">
                           <input type="checkbox" id="sameAddressCheckbox">
                           <label style="font-style: italic; font-size: small;" for="sameAddressCheckbox">Check if the permanent address is the same as above.</label>
-                        </div>
+                        </div> -->
 
                         <!-- Permanent Address -->
                         <div class="col-md-12">
@@ -307,104 +307,131 @@
                         </div>
 
                         <div class="mt-6">
-                          <button type="submit" class="btn btn-outline-success me-3"><i class="bx bx-save bx-md"></i> Register Patient</button>
-                          <button type="reset" class="btn btn-outline-danger">Cancel</button>
-                        </div>
+                            <button type="submit" class="btn btn-outline-success me-3"><i class="bx bx-save bx-md"></i> Update Patient</button>
+                            <button type="reset" class="btn btn-outline-danger">Cancel</button>
+                          </div>
                         </div>
                       </form>
-
-                      <script>
-                        // Event listener for "Same Address" checkbox
-                        document.getElementById('sameAddressCheckbox').addEventListener('change', function() {
-                          var presentAddress = document.getElementById('presentAddress').value;
-                          var presentZipCode = document.getElementById('presentZipCode').value;
-                      
-                          if (this.checked) {
-                            // Copy present address to permanent address
-                            document.getElementById('permanentAddress').value = presentAddress;
-                            document.getElementById('permanentZipCode').value = presentZipCode;
-                      
-                            // Disable the permanent address and zip code fields
-                            document.getElementById('permanentAddress').disabled = true;
-                            document.getElementById('permanentZipCode').disabled = true;
-                          } else {
-                            // Enable the permanent address and zip code fields for editing
-                            document.getElementById('permanentAddress').disabled = false;
-                            document.getElementById('permanentZipCode').disabled = false;
-                          }
-                        });
-                          
-        // Fetch and populate the next available Hospital Record No. when the button is clicked
-        document.getElementById('generateNewHospitalRecordNo').addEventListener('click', async function() {
-            try {
-                const response = await fetch('/api/patients/generate-hospital-record-no');
-                if (response.ok) {
-                    const data = await response.text();
-                    document.getElementById('hospitalRecordNo').value = data;
-                } else {
-                    console.error('Failed to generate hospital record number');
-                }
-            } catch (error) {
-                console.error('Error generating hospital record number:', error);
-            }
-        });
-
-        // Fetch and populate the Hospital Record No. on page load
-        document.addEventListener('DOMContentLoaded', async function() {
-            try {
-                const response = await fetch('/api/patients/generate-hospital-record-no');
-                if (response.ok) {
-                    const data = await response.text();
-                    document.getElementById('hospitalRecordNo').value = data;
-                } else {
-                    console.error('Failed to generate hospital record number');
-                }
-            } catch (error) {
-                console.error('Error generating hospital record number:', error);
-            }
-        });
-                      
-                        // Handle form submission to create a new patient
-                        document.getElementById('patientForm').addEventListener('submit', async function(event) {
-                          event.preventDefault();
-                      
-                          const formData = new FormData(this);
-                          const patientData = Object.fromEntries(formData.entries());
-                      
-                          // Ensure the hospital record number is included in the data
-                          const hospitalRecordNo = document.getElementById('hospitalRecordNo').value;
-                          patientData.hospitalRecordNo = hospitalRecordNo; // Add the generated hospital record number
-                      
-                          try {
-                            const response = await fetch('/api/patients/add', {
-                              method: 'POST',
-                              headers: {
-                                'Content-Type': 'application/json',
-                              },
-                              body: JSON.stringify(patientData),
-                            });
-                      
-                            if (response.ok) {
-                              const savedPatient = await response.json();
-                              alert('Patient Registered Successfully');
-                              // Redirect to the patient table page after successful registration
-                              window.location.href = '/patientstable';
-                            } else {
-                              alert('Error registering patient');
-                            }
-                          } catch (error) {
-                            alert('An error occurred during registration');
-                            console.error('Error submitting form:', error);
-                          }
-                        });
-                      </script>
                       
                     </div>
+
+
+                    <script>
+// Function to fetch the patient data based on hospitalRecordNo from the URL
+function getPatientData() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const hospitalRecordNo = urlParams.get('hospRecordNo'); // Get hospitalRecordNo from URL
+
+    if (hospitalRecordNo) {
+        fetch(`http://localhost:2525/api/patients/getbyid/${hospitalRecordNo}`)
+            .then(response => response.json())
+            .then(patient => {
+                // Populate the form fields with the fetched patient data
+                document.getElementById('hospitalRecordNo').value = patient.hospitalRecordNo;
+                document.getElementById('firstName').value = patient.firstName;
+                document.getElementById('middleName').value = patient.middleName || '';
+                document.getElementById('lastName').value = patient.lastName;
+                document.getElementById('sex').value = patient.sex;
+                document.getElementById('status').value = patient.status;
+                document.getElementById('phoneNumber').value = patient.contactInfo || ''; // Assuming contactInfo is phone number
+                document.getElementById('birthdate').value = patient.birthdate;
+                document.getElementById('religion').value = patient.religion;
+                document.getElementById('birthPlace').value = patient.placeOfBirth;
+                document.getElementById('presentAddress').value = patient.presentAddress;
+                document.getElementById('presentZipCode').value = patient.presentZipCode || '';
+                document.getElementById('permanentAddress').value = patient.permanentAddress || '';
+                document.getElementById('permanentZipCode').value = patient.permanentZipCode || '';
+            })
+            .catch(error => console.error('Error fetching patient data:', error));
+    } else {
+        console.error('No hospitalRecordNo provided in URL');
+    }
+}
+
+// Call the function to fetch patient data when the page loads
+document.addEventListener('DOMContentLoaded', getPatientData);
+
+// Event listener for form submission
+document.getElementById('patientForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Get the hospital record number from the form
+    const hospitalRecordNo = document.getElementById('hospitalRecordNo').value;
+
+    // Collect data from the form fields
+    const patientData = {
+        hospitalRecordNo: hospitalRecordNo,
+        firstName: document.getElementById('firstName').value,
+        middleName: document.getElementById('middleName').value,
+        lastName: document.getElementById('lastName').value,
+        sex: document.getElementById('sex').value,
+        status: document.getElementById('status').value,
+        contactInfo: document.getElementById('phoneNumber').value,
+        birthdate: document.getElementById('birthdate').value,
+        religion: document.getElementById('religion').value,
+        placeOfBirth: document.getElementById('birthPlace').value,
+        presentAddress: document.getElementById('presentAddress').value,
+        presentZipCode: document.getElementById('presentZipCode').value,
+        permanentAddress: document.getElementById('permanentAddress').value,
+        permanentZipCode: document.getElementById('permanentZipCode').value
+    };
+
+    // Send the PUT request to update the patient
+    fetch(`http://localhost:2525/api/patients/updatebyhospitalRecordNo/${hospitalRecordNo}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(patientData) // Send the form data as JSON
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Patient updated successfully');
+            // Optionally redirect to another page, e.g., patient list
+            window.location.href = '/patientstable';  // Adjust as necessary
+        } else {
+            alert('Failed to update patient');
+        }
+    })
+    .catch(error => {
+        console.error('Error updating patient:', error);
+        alert('Error updating patient');
+    });
+});
+
+                        </script>
+                        
                     <!-- /Account -->
 
 
 
                   </div>
+                  <!-- <div class="card">
+                    <h5 class="card-header">Delete Account</h5>
+                    <div class="card-body">
+                      <div class="mb-6 col-12 mb-0">
+                        <div class="alert alert-warning">
+                          <h5 class="alert-heading mb-1">Are you sure you want to delete your account?</h5>
+                          <p class="mb-0">Once you delete your account, there is no going back. Please be certain.</p>
+                        </div>
+                      </div>
+                      <form id="formAccountDeactivation" onsubmit="return false">
+                        <div class="form-check my-8 ms-2">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="accountActivation"
+                            id="accountActivation" />
+                          <label class="form-check-label" for="accountActivation"
+                            >I confirm my account deactivation</label
+                          >
+                        </div>
+                        <button type="submit" class="btn btn-danger deactivate-account" disabled>
+                          Deactivate Account
+                        </button>
+                      </form>
+                    </div>
+                  </div> -->
                 </div>
               </div>
             </div>

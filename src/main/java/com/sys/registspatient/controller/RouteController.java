@@ -16,4 +16,8 @@ public class RouteController {
         return "register"; 
     }
 
+    @GetMapping("/editpatient")
+    public String redirectToeditpatient() {
+        return "editpatient"; 
+    }
 }
