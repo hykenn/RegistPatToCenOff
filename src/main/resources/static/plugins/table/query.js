@@ -85,16 +85,45 @@ document.getElementById('searchButton').addEventListener('click', function () {
       .then(patient => {
         const modalBody = document.getElementById('modalBody');
         modalBody.innerHTML = `
-          <h5>Patient Details</h5>
-          <p class="patient-details"><strong>Hospital Record No:</strong> <h5>${patient.hospitalRecordNo}</h5></p>
-          <p class="patient-details"><strong>Name:</strong> <h5>${patient.firstName} ${patient.middleName} ${patient.lastName}</h5></p>
-          <p class="patient-details"><strong>Birthdate:</strong> <h5>${patient.birthdate}</h5></p>
-          <p class="patient-details"><strong>Sex:</strong> <h5>${patient.sex}</h5></p>
-          <p class="patient-details"><strong>Religion:</strong> <h5>${patient.religion}</h5></p>
-          <p class="patient-details"><strong>Contact:</strong> <h5>${patient.contactInfo}</h5></p>
-          <p class="patient-details"><strong>Birth Place:</strong> <h5>${patient.placeOfBirth}</h5></p>
-          <p class="patient-details"><strong>Address:</strong> <h5>${patient.presentAddress}</h5></p>
-        `;
+        <h5>Patient Details</h5>
+        <table class="table">
+        <tbody>
+          <tr>
+            <th>Hospital Record No:</th>
+            <td><h5>${patient.hospitalRecordNo}</h5></td>
+          </tr>
+          <tr>
+            <th>Name:</th>
+            <td><h5>${patient.firstName} ${patient.middleName} ${patient.lastName}</h5></td>
+          </tr>
+          <tr>
+            <th>Birthdate:</th>
+            <td><h5>${patient.birthdate}</h5></td>
+          </tr>
+          <tr>
+            <th>Sex:</th>
+            <td><h5>${patient.sex}</h5></td>
+          </tr>
+          <tr>
+            <th>Religion:</th>
+            <td><h5>${patient.religion}</h5></td>
+          </tr>
+          <tr>
+            <th>Contact:</th>
+            <td><h5>${patient.contactInfo}</h5></td>
+          </tr>
+          <tr>
+            <th>Birth Place:</th>
+            <td><h5>${patient.placeOfBirth}</h5></td>
+          </tr>
+          <tr>
+            <th>Address:</th>
+            <td><h5>${patient.presentAddress}</h5></td>
+          </tr>
+          </tbody>
+        </table>
+      `;
+      
   
         const modalFooter = document.getElementById('modalFooter');
         modalFooter.innerHTML = `

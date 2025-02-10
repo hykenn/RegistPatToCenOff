@@ -40,6 +40,9 @@ function fetchPatients() {
                     <a class="dropdown-item delete-btn" data-hospRecordNo="${patient.hospitalRecordNo}" data-bs-toggle="modal" data-bs-target="#basicModaldelete">
                       <i class="bx bx-trash me-1"></i> Delete
                     </a>
+                    <a class="dropdown-item consent-btn" consent-conshospRecordNo="${patient.hospitalRecordNo}">
+                      <i class="bx bx-printer me-1"></i> Patient Consent
+                    </a>
                   </div>
                 </div>
               </td>
@@ -99,3 +102,130 @@ function fetchPatients() {
     $('#basicModaldelete').modal('hide');
   });
 
+  document.addEventListener('click', function (event) {
+    if (event.target && event.target.classList.contains('consent-btn')) {
+        const hospitalRecordNo = event.target.getAttribute('consent-conshospRecordNo');
+
+        fetch(`http://localhost:2525/api/patients/getbyid/${hospitalRecordNo}`)
+            .then(response => response.json())
+            .then(patient => {
+                if (patient) {
+                    const patientName = `${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}`;
+                    
+                    const consentFormHTML = `
+                        <div class="modal fade" id="consentModal" tabindex="-1" aria-labelledby="consentModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" id="printArea">
+                                        <!-- Logos and Header Section -->
+                                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                                            <!-- DOH Logo -->
+                                            <img src="../assets/img/favicon/doh.png" alt="DOH Logo" style="height: 80px;">
+                                            
+                                            <!-- Centered Text -->
+                                            <div style="text-align: center; flex-grow: 1;">
+                                                <p style="margin: 0; font-size: 18px; font-weight: bold; color: black;">Sample District/Provincial Hospital</p>
+                                                <p style="margin: 0; font-size: 18px; font-weight: bold; color: black;">Municipality of Magallanes</p>
+                                                <p style="margin: 0; font-size: 14px; color: black;">Purok 8, Brgy. Sto. Rosario, Magallanes, Agusan del Norte</p>
+                                            </div>
+
+                                            <!-- BP Logo -->
+                                            <img src="../assets/img/favicon/bp.png" alt="BP Logo" style="height: 80px;">
+                                        </div>
+
+                                        <!-- Form Title -->
+                                        <h5 class="text-center"><b>PATIENT CONSENT FORM</b></h5>
+
+                                        <h6 style="color: rgb(2, 146, 2);"><b>Patient Information</b></h6>
+                                        <p><strong>Full Name:</strong> <span style="color: black; font-weight: bold;">${patientName}</span></p>
+                                        <p><strong>Date of Birth:</strong> <span style="color: black; font-weight: bold;">${patient.birthdate}</span></p>
+                                        <p><strong>Address:</strong> <span style="color: black; font-weight: bold;">${patient.presentAddress}</span></p>
+                                        <p><strong>Contact Number:</strong> <span style="color: black; font-weight: bold;">${patient.contactInfo}</span></p>
+
+                                        <h6 style="color: rgb(2, 146, 2);"><b>Consent for Medical Treatment and Data Transmission</b></h6>
+                                        <p>
+                                            I, <span style="color: black; font-weight: bold;">${patientName}</span>, hereby authorize 
+                                            <span style="color: black; font-weight: bold;">Sample District/Provincial Hospital</span> and its authorized medical staff 
+                                            to provide necessary medical examination, treatment, and healthcare services as deemed appropriate for my condition. 
+                                            I understand that my medical records, including diagnosis, treatment, and laboratory results, 
+                                            will be maintained by the hospital as part of my patient file.
+                                        </p>
+
+                                        <p>
+                                            Additionally, I grant permission to <span style="color: black; font-weight: bold;">Sample District/Provincial Hospital</span> 
+                                            to disclose and transmit my personal and medical information to relevant third parties:
+                                        </p>
+
+                                        <ul>
+                                            <li><b>Health Insurance Providers</b> – For claims processing and reimbursement of medical expenses.</li>
+                                            <li><b>Government Health Agencies</b> – For compliance with legal and regulatory requirements.</li>
+                                            <li><b>Other Healthcare Facilities or Physicians</b> – If referral or further treatment is required.</li>
+                                            <li><b>Legal Entities</b> – If requested by law enforcement or required by law.</li>
+                                        </ul>
+
+                                        <p>
+                                            I understand that my data will be transmitted securely and handled in accordance with applicable data privacy laws and hospital policies. 
+                                            I also acknowledge that I have the right to revoke this consent at any time by providing written notice to 
+                                            <span style="color: black; font-weight: bold;">Sample District/Provincial Hospital</span>, 
+                                            except when disclosure has already been made in reliance on this authorization.
+                                        </p>
+
+                                        <h6 style="color: rgb(2, 146, 2);"><b>Signature:</b></h6>
+                                        <p><strong>Patient Signature:</strong> ________________________</p>
+                                        <p><strong>Date:</strong> ________________________</p>
+
+                                        <h6 style="color: rgb(2, 146, 2);"><b>For Minor Patients:</b></h6>
+                                        <p><strong>Guardian/Representative Name:</strong> ________________________</p>
+                                        <p><strong>Relationship to Patient:</strong> ________________________</p>
+                                        <p><strong>Signature:</strong> ________________________</p>
+                                        <p><strong>Date:</strong> ________________________</p>
+
+                                        <h6 style="color: rgb(2, 146, 2);"><b>Witness (if required):</b></h6>
+                                        <p><strong>Witness Name:</strong> ________________________</p>
+                                        <p><strong>Date:</strong> ________________________</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <div class="btn-group">
+                                        <button type="button" class="btn btn-outline-success" id="printConsentForm"><i class="bx bx-printer me-1"></i> Print</button>
+                                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // Remove existing modal if it exists
+                    const existingModal = document.getElementById('consentModal');
+                    if (existingModal) {
+                        existingModal.remove();
+                    }
+
+                    // Append the modal to the body
+                    document.body.insertAdjacentHTML('beforeend', consentFormHTML);
+
+                    // Show the modal
+                    const consentModal = new bootstrap.Modal(document.getElementById('consentModal'));
+                    consentModal.show();
+
+                    // Add print functionality
+                    document.getElementById('printConsentForm').addEventListener('click', function () {
+                        const printContents = document.getElementById('printArea').innerHTML;
+                        const originalContents = document.body.innerHTML;
+
+                        document.body.innerHTML = printContents;
+                        window.print();
+                        document.body.innerHTML = originalContents;
+                        window.location.reload(); // Reload to restore the modal and page
+                    });
+
+                } else {
+                    alert('Patient data not found');
+                }
+            })
+            .catch(error => console.error('Error fetching patient details:', error));
+    }
+});
