@@ -85,53 +85,117 @@ document.getElementById('searchButton').addEventListener('click', function () {
       .then(patient => {
         const modalBody = document.getElementById('modalBody');
         modalBody.innerHTML = `
-        <h5>Patient Details</h5>
-        <table class="table">
-        <tbody>
-          <tr>
-            <th>Hospital Record No:</th>
-            <td><h5>${patient.hospitalRecordNo}</h5></td>
-          </tr>
-          <tr>
-            <th>Name:</th>
-            <td><h5>${patient.firstName} ${patient.middleName} ${patient.lastName}</h5></td>
-          </tr>
-          <tr>
-            <th>Birthdate:</th>
-            <td><h5>${patient.birthdate}</h5></td>
-          </tr>
-          <tr>
-            <th>Sex:</th>
-            <td><h5>${patient.sex}</h5></td>
-          </tr>
-          <tr>
-            <th>Religion:</th>
-            <td><h5>${patient.religion}</h5></td>
-          </tr>
-          <tr>
-            <th>Contact:</th>
-            <td><h5>${patient.contactInfo}</h5></td>
-          </tr>
-          <tr>
-            <th>Birth Place:</th>
-            <td><h5>${patient.placeOfBirth}</h5></td>
-          </tr>
-          <tr>
-            <th>Address:</th>
-            <td><h5>${patient.presentAddress}</h5></td>
-          </tr>
-          </tbody>
-        </table>
-      `;
-      
-  
+          <h5>Patient Encounter Details</h5>
+          <form id="patientEnctrForm">
+            <div class="mb-3">
+              <label for="loggedAt" class="form-label">Logged Patient Date</label>
+              <input type="datetime-local" class="form-control" id="loggedAt" required>
+            </div>
+            <div class="mb-3">
+              <label for="hospitalRecordNo" class="form-label">Hospital Record No</label>
+              <input type="text" class="form-control" id="hospitalRecordNo" value="${patient.hospitalRecordNo}" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="typeOfService" class="form-label">Type of Service</label>
+              <select class="form-control" id="typeOfService" required>
+                <option value="">Consultation Type</option>
+                <option value="MED">Medical</option>
+                <option value="SUR">Surgical</option>
+                <option value="OBS">Obstetrics</option>
+                <option value="GYN">Gynecology</option>
+                <option value="PED">Pediatrics</option>
+                <option value="ORTHO">Orthopedics</option>
+                <option value="OPHTHA">Ophthalmology</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="broughtBy" class="form-label">Brought By</label>
+              <select class="form-control" id="broughtBy" required>
+                <option value="">Brought By</option>
+                <option value="Ambulance">Ambulance</option>
+                <option value="Walk-in">Walk-in</option>
+                <option value="Referral">Referral</option>
+                <option value="FamMem">Family Member</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="typeOfEnctr" class="form-label">Type of Encounter</label>
+              <select class="form-control" id="typeOfEnctr" required>
+                <option value="">Type of Encounter</option>
+                <option value="ER">Emergency</option>
+                <option value="OPD">Outpatient</option>
+                <option value="ADM">Inpatient</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="chiefComplaint" class="form-label">Chief Complaint</label>
+              <textarea class="form-control" id="chiefComplaint" required></textarea>
+            </div>
+          </form>
+        `;
+
         const modalFooter = document.getElementById('modalFooter');
         modalFooter.innerHTML = `
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-            <i class="bx bx-cancel bx-md"></i> Close
-          </button>
+          <div class="btn-group">
+            <button type="button" class="btn btn-outline-success" id="saveBtnn">
+              <i class="bx bx-save bx-md"></i> Save Encounter
+            </button>
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">
+              <i class="bx bx-cancel bx-md"></i> Close
+            </button>
+          </div>
         `;
-  
+
+        // Add event listener to the save button
+        document.getElementById('saveBtnn').addEventListener('click', function () {
+          const loggedAt = document.getElementById('loggedAt').value;
+          const typeOfService = document.getElementById('typeOfService').value;
+          const broughtBy = document.getElementById('broughtBy').value;
+          const typeOfEnctr = document.getElementById('typeOfEnctr').value;
+          const chiefComplaint = document.getElementById('chiefComplaint').value;
+          const hospitalRecordNo = patient.hospitalRecordNo;
+
+          // Prepare the data to be saved
+          const encounterData = {
+            hospitalRecordNo: hospitalRecordNo,
+            typeOfService: typeOfService,
+            broughtBy: broughtBy,
+            typeOfEnctr: typeOfEnctr,
+            chiefComplaint: chiefComplaint,
+            loggedAt: loggedAt,
+            createdAt: new Date().toISOString(),
+            updatedAt: null,
+            deletedAt: null,
+          };
+
+          // Send the data to the backend API to save the encounter
+          const saveUrl = `http://localhost:2525/api/patients/addenctr`; // Ensure this matches the backend
+          fetch(saveUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(encounterData),
+          })
+          .then(response => response.json())
+          .then(result => {
+            if (result) {
+              alert('Patient encounter saved successfully!');
+              window.location.href = '/patientstable';
+              document.getElementById('patientEnctrForm').reset();
+              const myModal = bootstrap.Modal.getInstance(document.getElementById('basicModal'));
+              myModal.hide();
+            } else {
+              alert('Failed to save encounter.');
+            }
+          })
+          .catch(error => {
+            console.error('Error saving encounter data:', error);
+            alert('There was an error saving the encounter data.');
+          });
+        });
+
+        // Show the modal
         const myModal = new bootstrap.Modal(document.getElementById('basicModal'));
         myModal.show();
       })
@@ -139,5 +203,6 @@ document.getElementById('searchButton').addEventListener('click', function () {
         console.error('Error fetching patient details:', error);
         alert('There was an error fetching the patient details.');
       });
-  }
+}
+
   
