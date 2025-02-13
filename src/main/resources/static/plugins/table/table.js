@@ -33,7 +33,7 @@ function fetchPatients() {
                 </button>
                 <div class="dropdown-menu">
                   <a class="dropdown-item enctr-btn" enctr-enctrhospRecordNo="${patient.hospitalRecordNo}">
-                    <i class="bx bx-printer me-1"></i> View Encounter
+                    <i class="bx bx-user-circle me-1"></i> View Encounter
                   </a>
                   <a class="dropdown-item" href="/editpatient?hospRecordNo=${patient.hospitalRecordNo}">
                     <i class="bx bx-edit-alt me-1"></i> Edit
