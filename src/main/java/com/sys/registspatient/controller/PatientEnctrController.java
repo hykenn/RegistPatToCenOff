@@ -5,17 +5,24 @@ import com.sys.registspatient.service.PatientEnctrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/patientenctr")
+@RequestMapping("/api/patients")
 public class PatientEnctrController {
 
     @Autowired
     private PatientEnctrService patientEnctrService;
 
-    @PostMapping("/createEntcr")
+    @PostMapping("/addenctr")
     public PatientEnctr createPatientEnctr(@RequestBody PatientEnctr patientEnctr) {
         return patientEnctrService.createPatientEnctr(patientEnctr);
     }
 
-    // You can add more endpoints for GET, PUT, DELETE operations
+    // New GET endpoint to fetch records by hospitalRecordNo
+    @GetMapping("/allenctrbyhospitalrecno")
+    public List<PatientEnctr> getPatientEnctrByHospitalRecordNo(@RequestParam("hospitalRecordNo") String hospitalRecordNo) {
+        return patientEnctrService.getPatientEnctrByHospitalRecordNo(hospitalRecordNo);
+    }
+    
 }

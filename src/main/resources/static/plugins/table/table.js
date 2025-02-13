@@ -1,119 +1,117 @@
-
 function fetchPatients() {
-    fetch(`http://localhost:2525/api/patients/all`)
-      .then(response => response.json())
-      .then(patients => {
-        const patientList = document.getElementById('patientList');
-        patientList.innerHTML = ''; 
+  fetch(`http://localhost:2525/api/patients/all`)
+    .then(response => response.json())
+    .then(patients => {
+      const patientList = document.getElementById('patientList');
+      patientList.innerHTML = '';
 
-        if (patients.length === 0) {
-          const noPatientsMessage = document.createElement('tr');
-          noPatientsMessage.innerHTML = `
-              <td colspan="8" class="text-center">No patients registered</td>
-          `;
-          patientList.appendChild(noPatientsMessage);
-        } else {
+      if (patients.length === 0) {
+        const noPatientsMessage = document.createElement('tr');
+        noPatientsMessage.innerHTML = `
+            <td colspan="8" class="text-center">No patients registered</td>
+        `;
+        patientList.appendChild(noPatientsMessage);
+      } else {
+        patients.forEach(patient => {
+          const row = document.createElement('tr');
+          row.setAttribute('data-hospRecordNo', patient.hospitalRecordNo);
+          const patientName = `${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}`;
 
-          patients.forEach(patient => {
-            const row = document.createElement('tr');
-            row.setAttribute('data-hospRecordNo', patient.hospitalRecordNo); 
-            const patientName = `${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}`;
-
-            row.innerHTML = `
-              <td>${patient.hospitalRecordNo}</td>
-              <td>${patientName}</td>
-              <td>${patient.birthdate}</td>
-              <td>${patient.sex}</td>
-              <td>${patient.status}</td>
-              <td>${patient.placeOfBirth}</td>
-              <td>${patient.religion}</td>
-              <td>${patient.presentAddress}</td>
-              <td>
-                <div class="dropdown">
-                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                    <i class="bx bx-dots-vertical-rounded"></i>
-                  </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/editpatient?hospRecordNo=${patient.hospitalRecordNo}">
-                      <i class="bx bx-edit-alt me-1"></i> Edit
-                    </a>
-                    <a class="dropdown-item delete-btn" data-hospRecordNo="${patient.hospitalRecordNo}" data-bs-toggle="modal" data-bs-target="#basicModaldelete">
-                      <i class="bx bx-trash me-1"></i> Delete
-                    </a>
-                    <a class="dropdown-item consent-btn" consent-conshospRecordNo="${patient.hospitalRecordNo}">
-                      <i class="bx bx-printer me-1"></i> Patient Consent
-                    </a>
-                  </div>
+          row.innerHTML = `
+            <td>${patient.hospitalRecordNo}</td>
+            <td>${patientName}</td>
+            <td>${patient.birthdate}</td>
+            <td>${patient.sex}</td>
+            <td>${patient.status}</td>
+            <td>${patient.placeOfBirth}</td>
+            <td>${patient.religion}</td>
+            <td>${patient.presentAddress}</td>
+            <td>
+              <div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item enctr-btn" enctr-enctrhospRecordNo="${patient.hospitalRecordNo}">
+                    <i class="bx bx-printer me-1"></i> View Encounter
+                  </a>
+                  <a class="dropdown-item" href="/editpatient?hospRecordNo=${patient.hospitalRecordNo}">
+                    <i class="bx bx-edit-alt me-1"></i> Edit
+                  </a>
+                  <a class="dropdown-item delete-btn" data-hospRecordNo="${patient.hospitalRecordNo}" data-bs-toggle="modal" data-bs-target="#basicModaldelete">
+                    <i class="bx bx-trash me-1"></i> Delete
+                  </a>
+                  <a class="dropdown-item consent-btn" consent-conshospRecordNo="${patient.hospitalRecordNo}">
+                    <i class="bx bx-printer me-1"></i> Patient Consent
+                  </a>
                 </div>
-              </td>
-            `;
+              </div>
+            </td>
+          `;
 
-            patientList.appendChild(row);
-          });
-        }
-      })
-      .catch(error => console.error('Error fetching patient data:', error));
+          patientList.appendChild(row);
+        });
+      }
+    })
+    .catch(error => console.error('Error fetching patient data:', error));
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  fetchPatients();
+});
+
+document.addEventListener('click', function(event) {
+  // Handle delete button click
+  if (event.target && event.target.classList.contains('delete-btn')) {
+    const hospitalRecordNo = event.target.getAttribute('data-hospRecordNo');
+    document.getElementById('hospitalRecordNo').value = hospitalRecordNo;
   }
+});
 
-  document.addEventListener('DOMContentLoaded', function() {
-    fetchPatients();
-  });
-
-  document.addEventListener('click', function(event) {
-
-    if (event.target && event.target.classList.contains('delete-btn')) {
-      const hospitalRecordNo = event.target.getAttribute('data-hospRecordNo');
-      console.log("Hospital Record No from button:", hospitalRecordNo); 
-      document.getElementById('hospitalRecordNo').value = hospitalRecordNo;
-    }
-  });
-  document.getElementById('deleteBtn').addEventListener('click', function(event) {
-    event.preventDefault();
-    const hospitalRecordNo = document.getElementById('hospitalRecordNo').value; 
-    if (hospitalRecordNo) {
-      fetch(`http://localhost:2525/api/patients/softdelete/${hospitalRecordNo}`, {
-        method: 'DELETE', 
-        headers: {
-          'Content-Type': 'application/json'
+document.getElementById('deleteBtn').addEventListener('click', function(event) {
+  event.preventDefault();
+  const hospitalRecordNo = document.getElementById('hospitalRecordNo').value;
+  if (hospitalRecordNo) {
+    fetch(`http://localhost:2525/api/patients/softdelete/${hospitalRecordNo}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      if (response.ok) {
+        alert('Patient Data Deleted Successfully');
+        const patientRow = document.querySelector(`tr[data-hospRecordNo="${hospitalRecordNo}"]`);
+        if (patientRow) {
+          patientRow.remove();
         }
-      })
-      .then(response => {
-        if (response.ok) {
-          alert('Patient Data Deleted Successfully');
-          const patientRow = document.querySelector(`tr[data-hospRecordNo="${hospitalRecordNo}"]`);
-          if (patientRow) {
-            patientRow.remove();
-          }
-
         window.location.href = '/patientstable';
+      } else {
+        alert('Failed to soft-delete patient');
+      }
+    })
+    .catch(error => {
+      console.error('Error performing soft delete:', error);
+      alert('Error performing soft delete');
+    });
+  } else {
+    alert('Hospital record number is missing');
+  }
+  $('#basicModaldelete').modal('hide');
+});
 
-        } else {
-          alert('Failed to soft-delete patient');
-        }
-      })
-      .catch(error => {
-        console.error('Error performing soft delete:', error);
-        alert('Error performing soft delete');
-      });
-    } else {
-      alert('Hospital record number is missing');
-    }
+document.addEventListener('click', function (event) {
+  if (event.target && event.target.classList.contains('consent-btn')) {
+      const hospitalRecordNo = event.target.getAttribute('consent-conshospRecordNo');
 
-    $('#basicModaldelete').modal('hide');
-  });
-
-  document.addEventListener('click', function (event) {
-    if (event.target && event.target.classList.contains('consent-btn')) {
-        const hospitalRecordNo = event.target.getAttribute('consent-conshospRecordNo');
-
-        fetch(`http://localhost:2525/api/patients/getbyid/${hospitalRecordNo}`)
-            .then(response => response.json())
-            .then(patient => {
-                if (patient) {
-                    const patientName = `${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}`;
-                    
-                    const consentFormHTML = `
-                        <div class="modal fade" id="consentModal" tabindex="-1" aria-labelledby="consentModalLabel" aria-hidden="true">
+      fetch(`http://localhost:2525/api/patients/getbyid/${hospitalRecordNo}`)
+          .then(response => response.json())
+          .then(patient => {
+              if (patient) {
+                  const patientName = `${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}`;
+                  
+                  const consentFormHTML = `
+                       <div class="modal fade" id="consentModal" tabindex="-1" aria-labelledby="consentModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -196,36 +194,131 @@ function fetchPatients() {
                                 </div>
                             </div>
                         </div>
-                    `;
+                  `;
 
-                    // Remove existing modal if it exists
-                    const existingModal = document.getElementById('consentModal');
-                    if (existingModal) {
-                        existingModal.remove();
-                    }
+                  // Remove existing modal if it exists
+                  const existingModal = document.getElementById('consentModal');
+                  if (existingModal) {
+                      existingModal.remove();
+                  }
 
-                    // Append the modal to the body
-                    document.body.insertAdjacentHTML('beforeend', consentFormHTML);
+                  // Append the modal to the body
+                  document.body.insertAdjacentHTML('beforeend', consentFormHTML);
 
-                    // Show the modal
-                    const consentModal = new bootstrap.Modal(document.getElementById('consentModal'));
-                    consentModal.show();
+                  // Show the modal
+                  const consentModal = new bootstrap.Modal(document.getElementById('consentModal'));
+                  consentModal.show();
 
-                    // Add print functionality
-                    document.getElementById('printConsentForm').addEventListener('click', function () {
-                        const printContents = document.getElementById('printArea').innerHTML;
-                        const originalContents = document.body.innerHTML;
+                  // Add print functionality
+                  document.getElementById('printConsentForm').addEventListener('click', function () {
+                      const printContents = document.getElementById('printArea').innerHTML;
+                      const originalContents = document.body.innerHTML;
 
-                        document.body.innerHTML = printContents;
-                        window.print();
-                        document.body.innerHTML = originalContents;
-                        window.location.reload(); // Reload to restore the modal and page
-                    });
-
-                } else {
-                    alert('Patient data not found');
-                }
-            })
-            .catch(error => console.error('Error fetching patient details:', error));
-    }
+                      document.body.innerHTML = printContents;
+                      window.print();
+                      document.body.innerHTML = originalContents;
+                      window.location.reload(); // Reload to restore the modal and page
+                  });
+              } else {
+                  alert('Patient data not found');
+              }
+          })
+          .catch(error => console.error('Error fetching patient details:', error));
+  }
 });
+
+
+
+function formatDate(dateString) {
+  const options = {
+      year: 'numeric',
+      month: 'short', 
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: true,
+  };
+  const date = new Date(dateString);
+  return date.toLocaleString('en-US', options).replace(',', '').replace(':00', ''); 
+}
+
+// View Encounter
+document.addEventListener('click', function(event) {
+if (event.target && event.target.classList.contains('enctr-btn')) {
+  const hospitalRecordNo = event.target.getAttribute('enctr-enctrhospRecordNo'); 
+
+  // Fetch encounter data
+  fetch(`/api/patients/allenctrbyhospitalrecno?hospitalRecordNo=${hospitalRecordNo}`)
+    .then(response => response.json())
+    .then(data => {
+        const container = document.querySelector('#encounter-table-container');
+        
+        let existingTable = document.getElementById('encounter-table');
+        if (existingTable) {
+            existingTable.remove();
+        }
+
+        const table = document.createElement('table');
+        table.id = 'encounter-table'; 
+        table.classList.add('table', 'table-hover'); 
+
+        const thead = document.createElement('thead');
+        thead.innerHTML = `
+          <tr class="table-dark">
+            <th style="font-size: 12px;">Encounter Date</th>
+            <th style="font-size: 12px;">Hospital Record No</th>
+            <th style="font-size: 12px;">Type of Service</th>
+            <th style="font-size: 12px;">Brought By</th>
+            <th style="font-size: 12px;">Consultation Type</th>
+            <th style="font-size: 12px;">Consulting Doctor</th>
+            <th style="font-size: 12px;">Chief Complaint</th>
+          </tr>
+        `;
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+        
+        if (data.length === 0) {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="8">No encounters found for this hospital record number.</td>`;
+            tbody.appendChild(row);
+        } else {
+            data.forEach((encounter, index) => {
+                let consultationTypeClass = '';
+
+                // Check the value of the consultationType and set the class and icon
+                if (encounter.consultationType === 'ER' || encounter.consultationType === 'OPD') {
+                    consultationTypeClass = 'bg-warning'; // Warning class for ER and OPD
+                } else if (encounter.consultationType === 'ADM') {
+                    consultationTypeClass = 'bg-success'; // Success class for ADM
+                }
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="color: black; font-size: 10.5px;">${formatDate(encounter.loggedAt)}</td> <!-- Format the date here -->
+                    <td style="color: black;">${encounter.hospitalRecordNo}</td>
+                    <td style="color: black;">${encounter.typeOfService}</td>
+                    <td style="color: black;">${encounter.broughtBy}</td>
+                    <td class="${consultationTypeClass}" style="color: white; text-align: center;">
+                        ${encounter.consultationType} </td>
+                    <td style="color: black;">${encounter.consultingDoctor}</td>
+                    <td style="color: black;">${encounter.chiefComplaint}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        table.appendChild(tbody);
+        container.appendChild(table);
+
+        // Show the modal
+        var encounterModal = new bootstrap.Modal(document.getElementById('encounterModal'));
+        encounterModal.show();
+    })
+    .catch(error => {
+        console.error('Error fetching encounter data:', error);
+    });
+}
+});
+

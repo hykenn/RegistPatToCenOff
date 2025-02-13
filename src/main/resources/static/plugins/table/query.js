@@ -119,13 +119,17 @@ document.getElementById('searchButton').addEventListener('click', function () {
               </select>
             </div>
             <div class="mb-3">
-              <label for="typeOfEnctr" class="form-label">Type of Encounter</label>
-              <select class="form-control" id="typeOfEnctr" required>
-                <option value="">Type of Encounter</option>
+              <label for="consultationType" class="form-label">Consultation Type</label>
+              <select class="form-control" id="consultationType" required>
+                <option value="">Consulation Type</option>
                 <option value="ER">Emergency</option>
                 <option value="OPD">Outpatient</option>
                 <option value="ADM">Inpatient</option>
               </select>
+            </div>
+            <div class="mb-3">
+              <label for="consultingDoctor" class="form-label">Consulting Doctor</label>
+              <input type="text" class="form-control" id="consultingDoctor" required></textarea>
             </div>
             <div class="mb-3">
               <label for="chiefComplaint" class="form-label">Chief Complaint</label>
@@ -151,7 +155,8 @@ document.getElementById('searchButton').addEventListener('click', function () {
           const loggedAt = document.getElementById('loggedAt').value;
           const typeOfService = document.getElementById('typeOfService').value;
           const broughtBy = document.getElementById('broughtBy').value;
-          const typeOfEnctr = document.getElementById('typeOfEnctr').value;
+          const consultationType = document.getElementById('consultationType').value;
+          const consultingDoctor = document.getElementById('consultingDoctor').value;
           const chiefComplaint = document.getElementById('chiefComplaint').value;
           const hospitalRecordNo = patient.hospitalRecordNo;
 
@@ -160,7 +165,8 @@ document.getElementById('searchButton').addEventListener('click', function () {
             hospitalRecordNo: hospitalRecordNo,
             typeOfService: typeOfService,
             broughtBy: broughtBy,
-            typeOfEnctr: typeOfEnctr,
+            consultationType: consultationType,
+            consultingDoctor: consultingDoctor,
             chiefComplaint: chiefComplaint,
             loggedAt: loggedAt,
             createdAt: new Date().toISOString(),

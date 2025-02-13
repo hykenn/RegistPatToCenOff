@@ -5,6 +5,8 @@ import com.sys.registspatient.repository.PatientEnctrRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PatientEnctrService {
 
@@ -13,6 +15,11 @@ public class PatientEnctrService {
 
     public PatientEnctr createPatientEnctr(PatientEnctr patientEnctr) {
         return patientEnctrRepository.save(patientEnctr);
+    }
+
+    // New service method to get records by hospitalRecordNo
+    public List<PatientEnctr> getPatientEnctrByHospitalRecordNo(String hospitalRecordNo) {
+        return patientEnctrRepository.findByHospitalRecordNo(hospitalRecordNo);
     }
 
     // Add more service methods as needed
