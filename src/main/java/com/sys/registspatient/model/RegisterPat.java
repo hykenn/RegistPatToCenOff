@@ -38,7 +38,7 @@ public class RegisterPat {
     private String permanentZipCode;
 
     @Column(name = "birthdate")
-    private LocalDate birthdate; // Using LocalDate for birthdate
+    private LocalDate birthdate;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -49,10 +49,8 @@ public class RegisterPat {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    // Default constructor
     public RegisterPat() {}
 
-    // Constructor with parameters
     public RegisterPat(String hospitalRecordNo, String firstName, String middleName, String lastName,
                        String sex, String status, String placeOfBirth, String religion, String contactInfo,
                        String presentAddress, String permanentAddress, String presentZipCode,
@@ -77,7 +75,6 @@ public class RegisterPat {
         this.deletedAt = deletedAt;
     }
 
-    // Getters and Setters
     public Integer getId() {
         return id;
     }

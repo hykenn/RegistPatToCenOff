@@ -11,18 +11,16 @@ import java.util.Optional;
 
 public interface RegisterPatRepository extends JpaRepository<RegisterPat, Integer> {
 
-    // Fetch the latest added patient by ID (assuming the ID is auto-incremented)
     Optional<RegisterPat> findTopByOrderByIdDesc();
 
     Optional<RegisterPat> findById(Integer id);
 
-    // Check if a hospital record number exists in the database
     boolean existsByHospitalRecordNo(String hospitalRecordNo); 
 
     Optional<RegisterPat> findByHospitalRecordNo(String hospitalRecordNo);
 
     @Query("SELECT p FROM RegisterPat p WHERE p.deletedAt IS NULL")
-    List<RegisterPat> findAllActivePatients();  // Returns only active patients (not soft-deleted)
+    List<RegisterPat> findAllActivePatients();
 
     @Query("SELECT p FROM RegisterPat p WHERE " +
     "(LOWER(p.firstName) LIKE LOWER(CONCAT('%', :firstname, '%')) OR :firstname IS NULL) AND " +

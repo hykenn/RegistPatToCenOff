@@ -19,7 +19,6 @@ public class PatientEnctrController {
         return patientEnctrService.createPatientEnctr(patientEnctr);
     }
 
-    // New GET endpoint to fetch records by hospitalRecordNo
     @GetMapping("/allenctrbyhospitalrecno")
     public List<PatientEnctr> getPatientEnctrByHospitalRecordNo(@RequestParam("hospitalRecordNo") String hospitalRecordNo) {
         return patientEnctrService.getPatientEnctrByHospitalRecordNo(hospitalRecordNo);

@@ -41,14 +41,11 @@ public class PatientEnctr {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    // Default constructor
     public PatientEnctr() {}
 
-    // Constructor with parameters
     public PatientEnctr(String hospitalRecordNo, LocalDateTime loggedAt, LocalDateTime createdAt, LocalDateTime updatedAt,
     LocalDateTime deletedAt, String typeOfService, String broughtBy, String chiefComplaint, 
     String consultationType, String consultingDoctor) {
-
         this.hospitalRecordNo = hospitalRecordNo;
         this.typeOfService = typeOfService;
         this.broughtBy = broughtBy;
@@ -61,7 +58,6 @@ public class PatientEnctr {
         this.deletedAt = deletedAt;
     }
 
-    // Getters and Setters
     public Integer getId() {
         return id;
     }

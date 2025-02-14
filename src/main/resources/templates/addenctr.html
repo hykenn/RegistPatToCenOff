@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Patient Encounter</title>
-    <!-- Add your CSS here -->
 </head>
 <body>
     <h2>Add Patient Encounter</h2>
-
-    <!-- Display the hospitalRecordNo -->
     <div id="patientDetails">
         <p><strong>Hospital Record No:</strong> <span id="hospitalRecordNo"></span></p>
     </div>
@@ -37,57 +34,6 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-
-    <script>
-        // Retrieve the hospitalRecordNo from localStorage
-        const hospitalRecordNo = localStorage.getItem('hospitalRecordNo');
-        
-        // Display the hospitalRecordNo in the page
-        document.getElementById('hospitalRecordNo').textContent = hospitalRecordNo;
-
-        // If no hospitalRecordNo is found, redirect to an error page
-        if (!hospitalRecordNo) {
-            alert('No patient selected. Please ensure a valid Hospital Record Number.');
-            window.location.href = '/error.html'; // Redirect to an error page
-        }
-
-        // Handle form submission
-        document.getElementById('patientEnctrForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const typeOfService = document.getElementById('typeOfService').value;
-            const broughtBy = document.getElementById('broughtBy').value;
-            const chiefComplaint = document.getElementById('chiefComplaint').value;
-            const consultationType = document.getElementById('consultationType').value;
-            const consultingDoctor = document.getElementById('consultingDoctor').value;
-
-            const patientEnctrData = {
-                hospitalRecordNo: hospitalRecordNo,
-                typeOfService: typeOfService,
-                broughtBy: broughtBy,
-                chiefComplaint: chiefComplaint,
-                consultationType: consultationType,
-                consultingDoctor: consultingDoctor
-            };
-
-            // Send data to backend (API call to save the data)
-            fetch('http://localhost:2525/api/patientenctr', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(patientEnctrData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert('Patient Encounter saved successfully!');
-                window.location.href = '/success.html'; // Redirect to success page
-            })
-            .catch(error => {
-                console.error('Error saving patient encounter:', error);
-                alert('There was an error saving the patient encounter.');
-            });
-        });
-    </script>
+    <script src="../plugins/table/addenctr.js"></script>
 </body>
 </html>

@@ -10,7 +10,6 @@ document.getElementById('searchButton').addEventListener('click', function () {
     if (lastname) url += `lastname=${lastname}&`;
     if (birthdate) url += `birthdate=${birthdate}`;
   
-    // Remove trailing '&' or '?' if no valid params
     url = url.endsWith('&') ? url.slice(0, -1) : url;
     url = url.endsWith('?') ? url.slice(0, -1) : url;
   
@@ -150,7 +149,6 @@ document.getElementById('searchButton').addEventListener('click', function () {
           </div>
         `;
 
-        // Add event listener to the save button
         document.getElementById('saveBtnn').addEventListener('click', function () {
           const loggedAt = document.getElementById('loggedAt').value;
           const typeOfService = document.getElementById('typeOfService').value;
@@ -160,7 +158,6 @@ document.getElementById('searchButton').addEventListener('click', function () {
           const chiefComplaint = document.getElementById('chiefComplaint').value;
           const hospitalRecordNo = patient.hospitalRecordNo;
 
-          // Prepare the data to be saved
           const encounterData = {
             hospitalRecordNo: hospitalRecordNo,
             typeOfService: typeOfService,
@@ -174,8 +171,7 @@ document.getElementById('searchButton').addEventListener('click', function () {
             deletedAt: null,
           };
 
-          // Send the data to the backend API to save the encounter
-          const saveUrl = `http://localhost:2525/api/patients/addenctr`; // Ensure this matches the backend
+          const saveUrl = `http://localhost:2525/api/patients/addenctr`;
           fetch(saveUrl, {
             method: 'POST',
             headers: {
@@ -201,7 +197,6 @@ document.getElementById('searchButton').addEventListener('click', function () {
           });
         });
 
-        // Show the modal
         const myModal = new bootstrap.Modal(document.getElementById('basicModal'));
         myModal.show();
       })

@@ -196,20 +196,15 @@ document.addEventListener('click', function (event) {
                         </div>
                   `;
 
-                  // Remove existing modal if it exists
                   const existingModal = document.getElementById('consentModal');
                   if (existingModal) {
                       existingModal.remove();
                   }
 
-                  // Append the modal to the body
                   document.body.insertAdjacentHTML('beforeend', consentFormHTML);
-
-                  // Show the modal
                   const consentModal = new bootstrap.Modal(document.getElementById('consentModal'));
                   consentModal.show();
 
-                  // Add print functionality
                   document.getElementById('printConsentForm').addEventListener('click', function () {
                       const printContents = document.getElementById('printArea').innerHTML;
                       const originalContents = document.body.innerHTML;
@@ -217,7 +212,7 @@ document.addEventListener('click', function (event) {
                       document.body.innerHTML = printContents;
                       window.print();
                       document.body.innerHTML = originalContents;
-                      window.location.reload(); // Reload to restore the modal and page
+                      window.location.reload();
                   });
               } else {
                   alert('Patient data not found');
@@ -243,12 +238,9 @@ function formatDate(dateString) {
   return date.toLocaleString('en-US', options).replace(',', '').replace(':00', ''); 
 }
 
-// View Encounter
 document.addEventListener('click', function(event) {
 if (event.target && event.target.classList.contains('enctr-btn')) {
   const hospitalRecordNo = event.target.getAttribute('enctr-enctrhospRecordNo'); 
-
-  // Fetch encounter data
   fetch(`/api/patients/allenctrbyhospitalrecno?hospitalRecordNo=${hospitalRecordNo}`)
     .then(response => response.json())
     .then(data => {
@@ -258,11 +250,9 @@ if (event.target && event.target.classList.contains('enctr-btn')) {
         if (existingTable) {
             existingTable.remove();
         }
-
         const table = document.createElement('table');
         table.id = 'encounter-table'; 
         table.classList.add('table', 'table-hover'); 
-
         const thead = document.createElement('thead');
         thead.innerHTML = `
           <tr class="table-dark">
@@ -286,14 +276,11 @@ if (event.target && event.target.classList.contains('enctr-btn')) {
         } else {
             data.forEach((encounter, index) => {
                 let consultationTypeClass = '';
-
-                // Check the value of the consultationType and set the class and icon
                 if (encounter.consultationType === 'ER' || encounter.consultationType === 'OPD') {
-                    consultationTypeClass = 'bg-warning'; // Warning class for ER and OPD
+                    consultationTypeClass = 'bg-warning';
                 } else if (encounter.consultationType === 'ADM') {
-                    consultationTypeClass = 'bg-success'; // Success class for ADM
+                    consultationTypeClass = 'bg-success';
                 }
-
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td style="color: black; font-size: 10.5px;">${formatDate(encounter.loggedAt)}</td> <!-- Format the date here -->
@@ -308,11 +295,8 @@ if (event.target && event.target.classList.contains('enctr-btn')) {
                 tbody.appendChild(row);
             });
         }
-
         table.appendChild(tbody);
         container.appendChild(table);
-
-        // Show the modal
         var encounterModal = new bootstrap.Modal(document.getElementById('encounterModal'));
         encounterModal.show();
     })
