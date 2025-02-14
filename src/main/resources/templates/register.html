@@ -194,8 +194,8 @@
                           <div class="col-md-6">
                             <label for="firstName" class="form-label">First Name</label>
                               <div class="input-group">
-                                  <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name"/>
-                                  <button class="btn btn-success" type="button" id="generateNewHospitalRecordNo">
+                                  <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" required/>
+                                  <button class="btn btn-success" type="button" >
                                   </button>
                               </div>
                           </div>
@@ -203,8 +203,8 @@
                           <div class="col-md-6">
                             <label for="middleName" class="form-label">Middle Name</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="middleName" name="middleName" placeholder="Middle Name"/>
-                                <button class="btn btn-success" type="button" id="generateNewHospitalRecordNo">
+                                <input type="text" class="form-control" id="middleName" name="middleName" placeholder="Middle Name" required/>
+                                <button class="btn btn-success" type="button" >
                                 </button>
                             </div>
                         </div>
@@ -212,8 +212,8 @@
                           <div class="col-md-6">
                             <label for="lastName" class="form-label">Last Name</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name"/>
-                                <button class="btn btn-success" type="button" id="generateNewHospitalRecordNo">
+                                <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" required/>
+                                <button class="btn btn-success" type="button" >
                                 </button>
                             </div>
                         </div>
@@ -221,11 +221,11 @@
                           <div class="col-md-6">
                             <label for="sex" class="form-label">Sex</label>
                               <div class="input-group">
-                                  <select id="sex" class="form-select" name="sex">
+                                  <select id="sex" class="form-select" name="sex" required>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                     </select>
-                                  <button class="btn btn-success" type="button" id="generateNewHospitalRecordNo">
+                                  <button class="btn btn-success" type="button" >
                                 </button>
                               </div>
                           </div>
@@ -233,13 +233,13 @@
                           <div class="col-md-6">
                             <label for="status" class="form-label">Status</label>
                               <div class="input-group">
-                                      <select id="status" class="form-select" name="status">
+                                      <select id="status" class="form-select" name="status" required>
                                         <option value="Single">Single</option>
                                         <option value="Married">Married</option>
                                         <option value="Separated">Separated</option>
                                         <option value="Widow">Widow</option>
                                       </select>
-                                      <button class="btn btn-success" type="button" id="generateNewHospitalRecordNo">
+                                      <button class="btn btn-success" type="button" >
                                     </button>
                               </div>
                           </div>
@@ -247,8 +247,8 @@
                           <div class="col-md-6">
                             <label for="phoneNumber" class="form-label">Phone Number</label>
                               <div class="input-group">
-                                  <input type="text" class="form-control" id="phoneNumber" name="contactInfo" placeholder="202 555 0111"/>
-                                  <button class="btn btn-success" type="button" id="generateNewHospitalRecordNo">
+                                  <input type="text" class="form-control" id="phoneNumber" name="contactInfo" placeholder="Contact Number" required/>
+                                  <button class="btn btn-success" type="button" >
                                   </button>
                               </div>
                           </div>
@@ -256,8 +256,8 @@
                           <div class="col-md-6">
                             <label for="birthdate" class="form-label">Date of Birth</label>
                               <div class="input-group">
-                                  <input type="date" class="form-control" id="phoneNumber" name="birthdate"/>
-                                  <button class="btn btn-success" type="button" id="generateNewHospitalRecordNo">
+                                  <input type="date" class="form-control" id="phoneNumber" name="birthdate" required />
+                                  <button class="btn btn-success" type="button" >
                                   </button>
                               </div>
                           </div>
@@ -265,8 +265,8 @@
                           <div class="col-md-6">
                             <label for="religion" class="form-label">Religion</label>
                               <div class="input-group">
-                                  <input type="text" class="form-control" id="religion" name="religion" placeholder="Religion"/>
-                                  <button class="btn btn-success" type="button" id="generateNewHospitalRecordNo">
+                                  <input type="text" class="form-control" id="religion" name="religion" placeholder="Religion" required />
+                                  <button class="btn btn-success" type="button" >
                                   </button>
                               </div>
                           </div>
@@ -274,8 +274,8 @@
                           <div class="col-md-6">
                             <label for="birthPlace" class="form-label">Birth Place</label>
                              <div class="input-group">
-                                  <textarea class="form-control" id="birthPlace" name="placeOfBirth" placeholder="Birth Place"></textarea>
-                                  <button class="btn btn-success" type="button" id="generateNewHospitalRecordNo">
+                                  <textarea class="form-control" id="birthPlace" name="placeOfBirth" placeholder="Birth Place" required></textarea>
+                                  <button class="btn btn-success" type="button" >
                                   </button>
                               </div>
                           </div>
@@ -287,8 +287,8 @@
                         <div class="col-md-12">
                           <label for="presentAddress" class="form-label">Present Address</label>
                             <div class="input-group">
-                                <textarea class="form-control" id="presentAddress" name="presentAddress"></textarea>
-                                <button class="btn btn-success" type="button" id="generateNewHospitalRecordNo">
+                                <textarea class="form-control" id="presentAddress" name="presentAddress" required></textarea>
+                                <button class="btn btn-success" type="button" >
                                 </button>
                             </div>
                         </div>
@@ -296,8 +296,8 @@
                         <div class="col-md-6">
                           <label for="presentZipCode" class="form-label">Zip Code</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="presentZipCode" name="presentZipCode" placeholder="Zipcode"/>
-                                <button class="btn btn-success" type="button" id="generateNewHospitalRecordNo">
+                                <input type="text" class="form-control" id="presentZipCode" name="presentZipCode" placeholder="Zipcode" required/>
+                                <button class="btn btn-success" type="button" >
                                 </button>
                             </div>
                         </div>
@@ -310,8 +310,8 @@
                         <div class="col-md-12">
                           <label for="permanentAddress" class="form-label">Permanent Address</label>
                             <div class="input-group">
-                                <textarea class="form-control" id="permanentAddress" name="permanentAddress"></textarea>
-                                <button class="btn btn-success" type="button" id="generateNewHospitalRecordNo">
+                                <textarea class="form-control" id="permanentAddress" name="permanentAddress" required></textarea>
+                                <button class="btn btn-success" type="button" >
                                 </button>
                             </div>
                         </div>
@@ -319,8 +319,8 @@
                         <div class="col-md-6">
                           <label for="permanentZipCode" class="form-label">Zip Code</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="permanentZipCode" name="permanentZipCode" placeholder="Zipcode"/>
-                                <button class="btn btn-success" type="button" id="generateNewHospitalRecordNo">
+                                <input type="text" class="form-control" id="permanentZipCode" name="permanentZipCode" placeholder="Zipcode" required/>
+                                <button class="btn btn-success" type="button" >
                                 </button>
                             </div>
                         </div>
